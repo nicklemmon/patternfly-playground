@@ -7,4 +7,37 @@ body,
 
 body {
   font-family: var(--pf-t--global--font--family--body, inherit);
+  background: var(--pf-t--global--background--color--primary--default, #fff);
+  color: var(--pf-t--global--text--color--regular, inherit);
+}
+
+/* Approach A: token spans live inside PF pre/code — don't force Shiki background */
+.pf-shiki-tokens .line {
+  display: inline;
+}
+
+/* Approach B: Shiki owns the pre; tame it to sit inside PF CodeBlock */
+.shiki-html-body {
+  overflow: auto;
+}
+
+.shiki-html-body pre.shiki {
+  margin: 0;
+  padding: var(--pf-t--global--spacer--md, 1rem);
+  border: 0;
+  background: transparent !important;
+  font-family: var(--pf-t--global--font--family--mono, monospace);
+  font-size: var(--pf-t--global--font--size--sm, 0.875rem);
+  line-height: var(--pf-t--global--font--line-height--mono, 1.5);
+}
+
+.shiki-html-loading,
+.shiki-html-fallback {
+  padding: var(--pf-t--global--spacer--md, 1rem);
+}
+
+.shiki-html-fallback {
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: var(--pf-t--global--font--family--mono, monospace);
 }

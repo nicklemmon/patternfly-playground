@@ -2,8 +2,6 @@
 
 Throwaway Vite + React + TypeScript sandbox with PatternFly 6 prewired.
 
-Uses **Vite 6** (esbuild) on purpose — Vite 8’s Rolldown native bindings currently fail in CodeSandbox.
-
 ## Local
 
 ```bash
@@ -28,12 +26,17 @@ npm run format
 npm run format:check
 ```
 
-## CodeSandbox
+## Experiment: Shiki + PatternFly CodeBlock
 
-Open / fork:
+Branch: `experiment/shiki-code-block`
 
-```text
-https://codesandbox.io/p/github/nicklemmon/patternfly-playground
-```
+Compares two ways to add Shiki highlighting to PF `CodeBlock`:
 
-Or use **Use this template** on GitHub. `.codesandbox/tasks.json` installs deps and starts `npm run dev` automatically.
+| Approach | Composition                                                  | Recommendation                      |
+| -------- | ------------------------------------------------------------ | ----------------------------------- |
+| **A**    | `codeToHast` → React token spans as `CodeBlockCode` children | **Prefer** — keeps PF `<pre><code>` |
+| **B**    | `codeToHtml` as body, skip `CodeBlockCode`                   | Demo only — Shiki owns `<pre>`      |
+
+Also includes a light/dark toggle via `pf-v6-theme-dark` on `<html>`, with Shiki themes `github-light` / `github-dark`.
+
+Langs: `typescript`, `tsx`, `javascript`, `json`, `yaml`, `bash`.

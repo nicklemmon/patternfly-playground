@@ -2,6 +2,8 @@
 
 Throwaway Vite + React + TypeScript sandbox with PatternFly 6 prewired.
 
+Uses **Vite 6** (esbuild) on purpose — Vite 8’s Rolldown native bindings currently fail in CodeSandbox.
+
 ## Local
 
 ```bash

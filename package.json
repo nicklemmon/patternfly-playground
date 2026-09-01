@@ -1,15 +1,14 @@
 {
   "name": "patternfly-playground",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
-  "engines": {
-    "node": "^20.0.0 || >=22.0.0"
-  },
   "scripts": {
     "dev": "vite --host",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "preview": "vite preview --host"
   },
   "dependencies": {
@@ -23,8 +22,12 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^4.7.0",
+    "oxfmt": "^0.66.0",
     "oxlint": "^1.79.0",
     "typescript": "~5.9.2",
     "vite": "^6.4.3"
+  },
+  "engines": {
+    "node": "^20.0.0 || >=22.0.0"
   }
 }

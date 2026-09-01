@@ -10,11 +10,11 @@ import {
   ToggleGroup,
   ToggleGroupItem,
 } from "@patternfly/react-core";
-import { HighlightedCodeBlock } from "./components/HighlightedCodeBlock";
-import { ShikiHtmlCodeBlock } from "./components/ShikiHtmlCodeBlock";
-import { ThemeToggle } from "./components/ThemeToggle";
+import { HighlightedCodeBlock } from "./components/highlighted-code-block";
+import { ShikiHtmlCodeBlock } from "./components/shiki-html-code-block";
+import { ThemeToggle } from "./components/theme-toggle";
 import { HIGHLIGHT_LANGS, type HighlightLang } from "./highlight/languages";
-import { useColorMode } from "./hooks/useColorMode";
+import { useColorMode } from "./hooks/use-color-mode";
 import { SNIPPETS } from "./samples/snippets";
 
 export default function App() {

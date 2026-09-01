@@ -1,7 +1,7 @@
 import { toJsxRuntime } from "hast-util-to-jsx-runtime";
 import { Fragment, jsx, jsxs, type JSX } from "react/jsx-runtime";
 import { createHighlighter, type Highlighter } from "shiki/bundle/web";
-import type { ColorMode } from "../hooks/useColorMode";
+import type { ColorMode } from "../hooks/use-color-mode";
 import { HIGHLIGHT_LANGS, type HighlightLang } from "./languages";
 import { SHIKI_THEME_DARK, SHIKI_THEME_LIGHT, shikiThemeForMode } from "./themes";
 

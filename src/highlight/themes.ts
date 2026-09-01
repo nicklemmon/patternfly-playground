@@ -1,4 +1,4 @@
-import type { ColorMode } from "../hooks/useColorMode";
+import type { ColorMode } from "../hooks/use-color-mode";
 
 export const SHIKI_THEME_LIGHT = "github-light";
 export const SHIKI_THEME_DARK = "github-dark";

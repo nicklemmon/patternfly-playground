@@ -1,9 +1,9 @@
 import { useEffect, useState, type JSX } from "react";
 import { CodeBlock, CodeBlockCode, Spinner } from "@patternfly/react-core";
-import type { ColorMode } from "../hooks/useColorMode";
+import type { ColorMode } from "../hooks/use-color-mode";
 import { highlightToReactNodes } from "../highlight/highlighter";
 import type { HighlightLang } from "../highlight/languages";
-import { CopyCodeAction } from "./CopyCodeAction";
+import { CopyCodeAction } from "./copy-code-action";
 
 type HighlightedCodeBlockProps = {
   code: string;

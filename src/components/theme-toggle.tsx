@@ -1,5 +1,5 @@
 import { ToggleGroup, ToggleGroupItem } from "@patternfly/react-core";
-import type { ColorMode } from "../hooks/useColorMode";
+import type { ColorMode } from "../hooks/use-color-mode";
 
 type ThemeToggleProps = {
   colorMode: ColorMode;

@@ -11,7 +11,11 @@ npm install
 npm run dev
 ```
 
-Edit `src/App.tsx` to try components.
+Edit `src/app.tsx` to try components.
+
+### File naming
+
+Source files under `src/` use **kebab-case** (e.g. `theme-toggle.tsx`, `use-color-mode.ts`). Component and hook **exports** stay PascalCase / camelCase. Enforced by oxlint `unicorn/filename-case` via `npm run lint`. See [AGENTS.md](AGENTS.md).
 
 ### Format on save (oxfmt)
 

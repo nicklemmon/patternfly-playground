@@ -1,0 +1,18 @@
+.panel {
+  /* Semantic brand color token (defaults to brand blue) */
+  --top-inset-color: var(--pf-t--global--color--brand--default);
+
+  /* Combine the inset spacer token and the elevation box shadow token */
+  box-shadow: 
+    inset 0 10px 0 -5px var(--top-inset-color),
+    var(--pf-t--global--box-shadow--md);
+
+  /* Global border radius token */
+  border-radius: var(--pf-t--global--border--radius--medium);
+
+  corner-shape: squircle;
+}
+
+.panel-body {
+  padding: var(--pf-t--global--spacer--md);
+}

@@ -4,7 +4,7 @@
 
   /* Combine the inset spacer token and the elevation box shadow token */
   box-shadow: 
-    inset 0 10px 0 -5px var(--top-inset-color),
+    inset 0 5px 0 -1px var(--top-inset-color),
     var(--pf-t--global--box-shadow--md);
 
   /* Global border radius token */

@@ -6,7 +6,7 @@ export default function App() {
     <Flex
       style={{ padding: "1.5rem" }}
     >
-      <NodeStep>Hello, world</NodeStep>
+      <NodeStep title="Manual trigger"></NodeStep>
     </Flex>
   );
 }

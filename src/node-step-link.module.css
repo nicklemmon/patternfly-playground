@@ -1,0 +1,20 @@
+/* Remove underline across states */
+.link,
+.link:hover,
+.link:focus {
+  text-decoration: none;
+}
+
+/* Smooth transition for the arrow icon */
+.link svg,
+.link :global([class*="__icon"]) {
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Shift arrow 4px to the right on hover and keyboard focus */
+.link:hover svg,
+.link:hover :global([class*="__icon"]),
+.link:focus svg,
+.link:focus :global([class*="__icon"]) {
+  transform: translateX(1px);
+}

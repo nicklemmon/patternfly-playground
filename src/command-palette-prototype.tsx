@@ -34,6 +34,7 @@ import {
   RhUiSecuredIcon,
   RhUiSettingsIcon,
   RhUiUsersIcon,
+  SearchIcon,
 } from "@patternfly/react-icons";
 
 type Category = "Main" | "Configuration" | "System Administration";
@@ -169,8 +170,10 @@ function SpotlightContents({
           {resultStatus}
         </span>
         {results.length === 0 && (
-          <EmptyState variant="xs" titleText="No matches" headingLevel="h3">
-            <EmptyStateBody>Try “workflow” or “settings”.</EmptyStateBody>
+          <EmptyState variant="sm" icon={SearchIcon} titleText="No matches" headingLevel="h3">
+            <EmptyStateBody>
+              No results found for <strong>{query.trim()}</strong>.
+            </EmptyStateBody>
           </EmptyState>
         )}
         {categories.map((category) => {

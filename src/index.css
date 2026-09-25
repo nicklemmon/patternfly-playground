@@ -175,6 +175,12 @@ button {
   position: relative;
   min-height: 438px;
 }
+.pf-v6-c-modal-box.spotlight-modal {
+  --pf-v6-c-modal-box--BackgroundColor: var(--pf-t--global--background--color--secondary--default);
+}
+.pf-v6-c-menu.spotlight-palette {
+  --pf-v6-c-menu--BackgroundColor: var(--pf-t--global--background--color--secondary--default);
+}
 .spotlight-result {
   display: flex;
   align-items: flex-start;
@@ -182,6 +188,7 @@ button {
 }
 .spotlight-results {
   padding: var(--pf-t--global--spacer--xs);
+  background-color: var(--pf-t--global--background--color--floating--default);
 }
 .spotlight-result-icon {
   display: grid;

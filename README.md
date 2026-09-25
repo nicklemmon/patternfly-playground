@@ -2,7 +2,7 @@
 
 Throwaway Vite + React + TypeScript sandbox with PatternFly 6 prewired.
 
-Uses **Vite 6** (esbuild) on purpose — Vite 8’s Rolldown native bindings currently fail in CodeSandbox.
+Currently uses **Vite 8**. The CodeSandbox setup was originally written for Vite 6; it has not been re-verified after the Vite upgrade.
 
 ## Local
 
@@ -12,6 +12,8 @@ npm run dev
 ```
 
 Edit `src/app.tsx` to try components.
+
+The header lets you choose System, Light, or Dark mode and independently opt in to Project Felt. Your selection is saved in this browser; System follows OS appearance changes.
 
 ### File naming
 
@@ -36,4 +38,4 @@ Open / fork:
 https://codesandbox.io/p/github/nicklemmon/patternfly-playground
 ```
 
-Or use **Use this template** on GitHub. `.codesandbox/tasks.json` installs deps and starts `npm run dev` automatically.
+Or use **Use this template** on GitHub. `.codesandbox/tasks.json` installs deps and starts `npm run dev` automatically. This is an interactive development preview, not a deployed static site. Local, uncommitted changes will not appear in the GitHub import.

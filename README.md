@@ -2,7 +2,7 @@
 
 Throwaway Vite + React + TypeScript sandbox with PatternFly 6 prewired.
 
-Currently uses **Vite 8**. The CodeSandbox setup was originally written for Vite 6; it has not been re-verified after the Vite upgrade.
+Currently uses **Vite 8**. CodeSandbox is configured to run Node 24 LTS through the Dev Container configuration.
 
 ## Local
 
@@ -39,3 +39,5 @@ https://codesandbox.io/p/github/nicklemmon/patternfly-playground
 ```
 
 Or use **Use this template** on GitHub. `.codesandbox/tasks.json` installs deps and starts `npm run dev` automatically. This is an interactive development preview, not a deployed static site. Local, uncommitted changes will not appear in the GitHub import.
+
+If an existing CodeSandbox still reports Node 20, rebuild or restart its Dev Container and rerun the setup task so dependencies are reinstalled under Node 24.

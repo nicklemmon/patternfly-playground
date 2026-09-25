@@ -175,15 +175,6 @@ button {
   position: relative;
   min-height: 438px;
 }
-.pf-v6-c-modal-box.spotlight-modal {
-  --pf-v6-c-modal-box__body--last-child--PaddingBlockEnd: 0;
-}
-.pf-v6-c-menu.spotlight-palette {
-  --pf-v6-c-menu--PaddingBlockStart: 0;
-  --pf-v6-c-menu--PaddingBlockEnd: 0;
-  --pf-v6-c-menu--PaddingInlineStart: 0;
-  --pf-v6-c-menu--PaddingInlineEnd: 0;
-}
 .spotlight-result {
   display: flex;
   align-items: flex-start;
@@ -191,7 +182,6 @@ button {
 }
 .spotlight-results {
   padding: var(--pf-t--global--spacer--xs);
-  background-color: var(--pf-t--global--background--color--secondary--default);
 }
 .spotlight-result-icon {
   display: grid;
@@ -200,7 +190,7 @@ button {
   width: var(--pf-t--global--spacer--lg);
   height: var(--pf-t--global--spacer--lg);
   border-radius: var(--pf-t--global--border--radius--small);
-  background: var(--pf-t--global--background--color--floating--default);
+  background: var(--pf-t--global--background--color--secondary--default);
   color: var(--pf-t--global--icon--color--brand--default);
 }
 .spotlight-result-copy {

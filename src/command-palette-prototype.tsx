@@ -164,7 +164,7 @@ function SpotlightContents({
           />
         </MenuSearchInput>
       </MenuSearch>
-      <MenuContent>
+      <MenuContent className="spotlight-results">
         <span className="pf-v6-screen-reader" role="status" aria-live="polite" aria-atomic="true">
           {resultStatus}
         </span>

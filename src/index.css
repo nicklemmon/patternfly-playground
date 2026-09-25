@@ -177,8 +177,11 @@ button {
 }
 .spotlight-result {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--pf-t--global--spacer--sm);
+}
+.spotlight-results {
+  padding: var(--pf-t--global--spacer--xs);
 }
 .spotlight-result-icon {
   display: grid;

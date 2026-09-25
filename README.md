@@ -2,7 +2,7 @@
 
 Throwaway Vite + React + TypeScript sandbox with PatternFly 6 prewired.
 
-Currently uses **Vite 8**. CodeSandbox is configured to run Node 24 LTS through the Dev Container configuration.
+Currently uses **Vite 8**.
 
 ## Local
 
@@ -30,14 +30,8 @@ npm run format
 npm run format:check
 ```
 
-## CodeSandbox
+## Live preview
 
-Open / fork:
+The latest version of `main` is deployed to [GitHub Pages](https://nicklemmon.github.io/patternfly-playground/) by the workflow in `.github/workflows/deploy-pages.yml`. The repository is configured to use **GitHub Actions** as the Pages build source.
 
-```text
-https://codesandbox.io/p/github/nicklemmon/patternfly-playground
-```
-
-Or use **Use this template** on GitHub. `.codesandbox/tasks.json` installs deps and starts `npm run dev` automatically. This is an interactive development preview, not a deployed static site. Local, uncommitted changes will not appear in the GitHub import.
-
-If an existing CodeSandbox still reports Node 20, rebuild or restart its Dev Container and rerun the setup task so dependencies are reinstalled under Node 24.
+To check the production build locally, run `npm run build` followed by `npm run preview`. Because this is a project Pages site, the preview is served at `/patternfly-playground/`.

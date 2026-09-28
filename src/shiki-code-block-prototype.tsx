@@ -32,10 +32,12 @@ type HighlightState<T> =
 
 type CodeBlockProps = { code: string; lang: HighlightLang; pair: ThemePair };
 
+// Keeps showing the last result while the next one loads, so swapping themes or
+// languages replaces the code and background in one render instead of flashing a spinner.
 function useHighlighted<T>(
   { code, lang, pair }: CodeBlockProps,
   highlight: (code: string, lang: HighlightLang, pair: ThemePair) => Promise<Highlighted<T>>,
-): HighlightState<T> {
+): [HighlightState<T>, isStale: boolean] {
   const [result, setResult] = useState<{ key: string; highlighted: HighlightState<T> }>();
   const key = `${pair.id}\n${lang}\n${code}`;
 
@@ -58,7 +60,7 @@ function useHighlighted<T>(
     };
   }, [code, lang, pair, key, highlight]);
 
-  return result?.key === key ? result.highlighted : { status: "loading" };
+  return [result?.highlighted ?? { status: "loading" }, result !== undefined && result.key !== key];
 }
 
 function CopyCodeAction({ code, id }: { code: string; id: string }) {
@@ -89,11 +91,12 @@ const loadingSpinner = <Spinner size="md" aria-label="Highlighting code" />;
 /** Approach A: keep CodeBlockCode's <pre><code> and inject Shiki token spans. */
 function TokenSpansCodeBlock(props: CodeBlockProps) {
   const { code } = props;
-  const highlighted = useHighlighted<ReactNode>(props, highlightToReactNodes);
+  const [highlighted, isStale] = useHighlighted<ReactNode>(props, highlightToReactNodes);
 
   return (
     <CodeBlock
       className="shiki-code-block"
+      aria-busy={isStale}
       style={highlighted.status === "done" ? highlighted.value.style : undefined}
       actions={<CopyCodeAction code={code} id="approach-a-copy" />}
     >
@@ -111,11 +114,12 @@ function TokenSpansCodeBlock(props: CodeBlockProps) {
 /** Approach B: CodeBlock chrome only; Shiki owns the <pre><code> via HTML. */
 function ShikiHtmlCodeBlock(props: CodeBlockProps) {
   const { code } = props;
-  const highlighted = useHighlighted(props, highlightToHtml);
+  const [highlighted, isStale] = useHighlighted(props, highlightToHtml);
 
   return (
     <CodeBlock
       className="shiki-code-block"
+      aria-busy={isStale}
       style={highlighted.status === "done" ? highlighted.value.style : undefined}
       actions={<CopyCodeAction code={code} id="approach-b-copy" />}
     >

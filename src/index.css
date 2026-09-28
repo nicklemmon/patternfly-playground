@@ -225,6 +225,20 @@ button {
 .shiki-alert {
   margin-bottom: var(--pf-t--global--spacer--md);
 }
+.shiki-control-label {
+  display: block;
+  margin-bottom: var(--pf-t--global--spacer--xs);
+  color: var(--pf-t--global--text--color--subtle);
+  font-size: var(--pf-t--global--font--size--sm);
+  font-weight: 600;
+}
+/* Use the selected theme's surface so its token colors keep their intended contrast. */
+.pf-v6-c-code-block.shiki-code-block {
+  --pf-v6-c-code-block--BackgroundColor: var(--shiki-light-bg);
+}
+.pf-v6-theme-dark .pf-v6-c-code-block.shiki-code-block {
+  --pf-v6-c-code-block--BackgroundColor: var(--shiki-dark-bg);
+}
 /* Shiki emits both palettes as CSS variables; the playground theme class picks one. */
 .shiki-tokens span,
 .shiki-html-body span {

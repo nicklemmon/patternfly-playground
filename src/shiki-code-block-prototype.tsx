@@ -8,6 +8,8 @@ import {
   CodeBlockAction,
   CodeBlockCode,
   Content,
+  Flex,
+  FlexItem,
   Label,
   Spinner,
   Title,
@@ -15,25 +17,31 @@ import {
   ToggleGroupItem,
 } from "@patternfly/react-core";
 import { codeSamples } from "./shiki-code-samples";
-import { highlightLangs, highlightToHtml, highlightToReactNodes } from "./shiki-highlighter";
-import type { HighlightLang } from "./shiki-highlighter";
+import {
+  highlightLangs,
+  highlightToHtml,
+  highlightToReactNodes,
+  themePairs,
+} from "./shiki-highlighter";
+import type { Highlighted, HighlightLang, ThemePair } from "./shiki-highlighter";
 
-type Highlighted<T> =
+type HighlightState<T> =
   | { status: "loading" }
-  | { status: "done"; value: T }
+  | { status: "done"; value: Highlighted<T> }
   | { status: "error"; message: string };
 
+type CodeBlockProps = { code: string; lang: HighlightLang; pair: ThemePair };
+
 function useHighlighted<T>(
-  code: string,
-  lang: HighlightLang,
-  highlight: (code: string, lang: HighlightLang) => Promise<T>,
-): Highlighted<T> {
-  const [result, setResult] = useState<{ key: string; highlighted: Highlighted<T> }>();
-  const key = `${lang}\n${code}`;
+  { code, lang, pair }: CodeBlockProps,
+  highlight: (code: string, lang: HighlightLang, pair: ThemePair) => Promise<Highlighted<T>>,
+): HighlightState<T> {
+  const [result, setResult] = useState<{ key: string; highlighted: HighlightState<T> }>();
+  const key = `${pair.id}\n${lang}\n${code}`;
 
   useEffect(() => {
     let cancelled = false;
-    highlight(code, lang).then(
+    highlight(code, lang, pair).then(
       (value) => !cancelled && setResult({ key, highlighted: { status: "done", value } }),
       (error: unknown) =>
         !cancelled &&
@@ -48,7 +56,7 @@ function useHighlighted<T>(
     return () => {
       cancelled = true;
     };
-  }, [code, lang, key, highlight]);
+  }, [code, lang, pair, key, highlight]);
 
   return result?.key === key ? result.highlighted : { status: "loading" };
 }
@@ -79,14 +87,19 @@ function CopyCodeAction({ code, id }: { code: string; id: string }) {
 const loadingSpinner = <Spinner size="md" aria-label="Highlighting code" />;
 
 /** Approach A: keep CodeBlockCode's <pre><code> and inject Shiki token spans. */
-function TokenSpansCodeBlock({ code, lang }: { code: string; lang: HighlightLang }) {
-  const highlighted = useHighlighted<ReactNode>(code, lang, highlightToReactNodes);
+function TokenSpansCodeBlock(props: CodeBlockProps) {
+  const { code } = props;
+  const highlighted = useHighlighted<ReactNode>(props, highlightToReactNodes);
 
   return (
-    <CodeBlock actions={<CopyCodeAction code={code} id="approach-a-copy" />}>
+    <CodeBlock
+      className="shiki-code-block"
+      style={highlighted.status === "done" ? highlighted.value.style : undefined}
+      actions={<CopyCodeAction code={code} id="approach-a-copy" />}
+    >
       <CodeBlockCode id="approach-a-code" className="shiki-tokens">
         {highlighted.status === "done"
-          ? highlighted.value
+          ? highlighted.value.body
           : highlighted.status === "error"
             ? code
             : loadingSpinner}
@@ -96,16 +109,21 @@ function TokenSpansCodeBlock({ code, lang }: { code: string; lang: HighlightLang
 }
 
 /** Approach B: CodeBlock chrome only; Shiki owns the <pre><code> via HTML. */
-function ShikiHtmlCodeBlock({ code, lang }: { code: string; lang: HighlightLang }) {
-  const highlighted = useHighlighted(code, lang, highlightToHtml);
+function ShikiHtmlCodeBlock(props: CodeBlockProps) {
+  const { code } = props;
+  const highlighted = useHighlighted(props, highlightToHtml);
 
   return (
-    <CodeBlock actions={<CopyCodeAction code={code} id="approach-b-copy" />}>
+    <CodeBlock
+      className="shiki-code-block"
+      style={highlighted.status === "done" ? highlighted.value.style : undefined}
+      actions={<CopyCodeAction code={code} id="approach-b-copy" />}
+    >
       {highlighted.status === "done" ? (
         <div
           className="shiki-html-body"
           // Shiki HTML is generated from our own sample strings, not user HTML input.
-          dangerouslySetInnerHTML={{ __html: highlighted.value }}
+          dangerouslySetInnerHTML={{ __html: highlighted.value.body }}
         />
       ) : highlighted.status === "error" ? (
         <pre className="shiki-html-fallback">{code}</pre>
@@ -118,21 +136,50 @@ function ShikiHtmlCodeBlock({ code, lang }: { code: string; lang: HighlightLang 
 
 export function ShikiCodeBlockPrototype() {
   const [lang, setLang] = useState<HighlightLang>("typescript");
+  const [pair, setPair] = useState<ThemePair>(themePairs[0]);
   const code = codeSamples[lang];
+  const blockProps = { code, lang, pair };
 
   return (
     <div className="shiki-prototype">
-      <ToggleGroup aria-label="Sample language">
-        {highlightLangs.map((item) => (
-          <ToggleGroupItem
-            key={item}
-            text={item}
-            buttonId={`lang-${item}`}
-            isSelected={lang === item}
-            onChange={() => setLang(item)}
-          />
-        ))}
-      </ToggleGroup>
+      <Flex
+        className="shiki-controls"
+        spaceItems={{ default: "spaceItemsXl" }}
+        rowGap={{ default: "rowGapMd" }}
+      >
+        <FlexItem>
+          <span className="shiki-control-label" id="shiki-lang-label">
+            Language
+          </span>
+          <ToggleGroup aria-labelledby="shiki-lang-label" isCompact>
+            {highlightLangs.map((item) => (
+              <ToggleGroupItem
+                key={item}
+                text={item}
+                buttonId={`lang-${item}`}
+                isSelected={lang === item}
+                onChange={() => setLang(item)}
+              />
+            ))}
+          </ToggleGroup>
+        </FlexItem>
+        <FlexItem>
+          <span className="shiki-control-label" id="shiki-theme-label">
+            Theme
+          </span>
+          <ToggleGroup aria-labelledby="shiki-theme-label" isCompact>
+            {themePairs.map((item) => (
+              <ToggleGroupItem
+                key={item.id}
+                text={item.label}
+                buttonId={`theme-${item.id}`}
+                isSelected={pair.id === item.id}
+                onChange={() => setPair(item)}
+              />
+            ))}
+          </ToggleGroup>
+        </FlexItem>
+      </Flex>
 
       <section className="proposal">
         <div className="proposal-intro">
@@ -149,7 +196,7 @@ export function ShikiCodeBlockPrototype() {
             </p>
           </div>
         </div>
-        <TokenSpansCodeBlock code={code} lang={lang} />
+        <TokenSpansCodeBlock {...blockProps} />
       </section>
 
       <section className="proposal">
@@ -173,7 +220,7 @@ export function ShikiCodeBlockPrototype() {
             <code>CodeBlock</code> chrome only and lets Shiki own the pre.
           </Content>
         </Alert>
-        <ShikiHtmlCodeBlock code={code} lang={lang} />
+        <ShikiHtmlCodeBlock {...blockProps} />
       </section>
     </div>
   );

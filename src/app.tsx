@@ -78,7 +78,7 @@ export function PrototypeIndex() {
           Prototypes
         </Title>
       </div>
-      <Gallery hasGutter className="prototype-gallery">
+      <Gallery hasGutter maxWidths={{ default: "420px" }}>
         <Card isFullHeight>
           <CardHeader>
             <Label color="purple" isCompact>
@@ -93,6 +93,24 @@ export function PrototypeIndex() {
           <CardBody>Find Syntara pages from a keyboard-accessible command palette.</CardBody>
           <CardFooter>
             <Link to="/command-palette" aria-label="Open Syntara command palette prototype">
+              Open prototype
+            </Link>
+          </CardFooter>
+        </Card>
+        <Card isFullHeight>
+          <CardHeader>
+            <Label color="blue" isCompact>
+              Content
+            </Label>
+          </CardHeader>
+          <CardTitle>
+            <Title headingLevel="h2" size="lg">
+              Shiki code blocks
+            </Title>
+          </CardTitle>
+          <CardBody>Compare two ways to render Shiki syntax highlighting in a CodeBlock.</CardBody>
+          <CardFooter>
+            <Link to="/shiki-code-block" aria-label="Open Shiki code blocks prototype">
               Open prototype
             </Link>
           </CardFooter>

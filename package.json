@@ -18,8 +18,10 @@
     "@tanstack/hotkeys": "^0.10.1",
     "@tanstack/react-hotkeys": "^0.12.1",
     "@tanstack/react-router": "^1.170.40",
+    "hast-util-to-jsx-runtime": "^2.3.6",
     "react": "^19.3.0",
-    "react-dom": "^19.3.0"
+    "react-dom": "^19.3.0",
+    "shiki": "^4.4.3"
   },
   "devDependencies": {
     "@types/node": "^22.15.30",

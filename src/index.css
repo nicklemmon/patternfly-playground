@@ -82,9 +82,6 @@ button {
   font-size: 17px;
   line-height: 1.5;
 }
-.prototype-gallery {
-  max-width: 420px;
-}
 .back-link {
   display: inline-block;
   margin-bottom: var(--pf-t--global--spacer--lg);
@@ -217,6 +214,54 @@ button {
 }
 .proposal > .pf-v6-c-alert {
   margin-top: var(--pf-t--global--spacer--md);
+}
+.shiki-prototype {
+  display: grid;
+  gap: var(--pf-t--global--spacer--2xl);
+}
+.shiki-prototype .proposal-intro h2.pf-v6-c-title {
+  font-size: 22px;
+}
+.shiki-alert {
+  margin-bottom: var(--pf-t--global--spacer--md);
+}
+/* Shiki emits both palettes as CSS variables; the playground theme class picks one. */
+.shiki-tokens span,
+.shiki-html-body span {
+  color: var(--shiki-light);
+  font-style: var(--shiki-light-font-style);
+  font-weight: var(--shiki-light-font-weight);
+}
+.pf-v6-theme-dark .shiki-tokens span,
+.pf-v6-theme-dark .shiki-html-body span {
+  color: var(--shiki-dark);
+  font-style: var(--shiki-dark-font-style);
+  font-weight: var(--shiki-dark-font-weight);
+}
+/* Approach A: token spans live inside PatternFly's pre/code. */
+.shiki-tokens .line {
+  display: inline;
+}
+/* Approach B: Shiki owns the pre; tame it to sit inside CodeBlock. */
+.shiki-html-body {
+  overflow: auto;
+}
+.shiki-html-body pre.shiki {
+  margin: 0;
+  padding: var(--pf-t--global--spacer--md);
+  background: transparent;
+  font-family: var(--pf-t--global--font--family--mono);
+  font-size: var(--pf-t--global--font--size--sm);
+  line-height: var(--pf-t--global--font--line-height--body);
+}
+.shiki-html-loading,
+.shiki-html-fallback {
+  padding: var(--pf-t--global--spacer--md);
+}
+.shiki-html-fallback {
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: var(--pf-t--global--font--family--mono);
 }
 @media (max-width: 640px) {
   .playground-header {

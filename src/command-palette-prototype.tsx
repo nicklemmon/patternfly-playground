@@ -1,7 +1,9 @@
 // PROTOTYPE: A modal command palette for Syntara's visible navigation destinations.
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import Shortcut from "@patternfly/react-component-groups/dist/dynamic/Shortcut";
+import { resolveModifier } from "@tanstack/hotkeys";
+import { useHotkey } from "@tanstack/react-hotkeys";
 import {
   Alert,
   Bullseye,
@@ -219,17 +221,9 @@ export function CommandPalettePrototype() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Command | null>(null);
+  const isMac = resolveModifier("Mod") === "Meta";
 
-  useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
-        event.preventDefault();
-        setOpen((value) => !value);
-      }
-    }
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  useHotkey("Mod+K", () => setOpen((value) => !value), { ignoreInputs: false });
 
   function choose(command: Command) {
     setSelected(command);
@@ -277,7 +271,7 @@ export function CommandPalettePrototype() {
               </Button>
             </FlexItem>
             <FlexItem>
-              <Shortcut keys={["cmd", "k"]} />
+              <Shortcut keys={isMac ? ["cmd", "k"] : ["ctrl", "k"]} showSymbols={false} />
             </FlexItem>
           </Flex>
         </Bullseye>

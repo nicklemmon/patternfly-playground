@@ -15,6 +15,8 @@
     "@patternfly/react-component-groups": "^6.7.0",
     "@patternfly/react-core": "^6.6.1",
     "@patternfly/react-icons": "^6.6.1",
+    "@tanstack/hotkeys": "^0.10.1",
+    "@tanstack/react-hotkeys": "^0.12.1",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   },

@@ -1,6 +1,6 @@
 # PatternFly playground
 
-Throwaway Vite + React + TypeScript sandbox with PatternFly 6 prewired.
+Vite + React + TypeScript playground for PatternFly 6 prototypes.
 
 Currently uses **Vite 8**.
 
@@ -11,7 +11,9 @@ npm install
 npm run dev
 ```
 
-Edit `src/app.tsx` to try components.
+The index at `/` lists available prototypes. TanStack Router gives each prototype its own route; add a route in `src/router.tsx` and a card on the index in `src/app.tsx` when creating a new one.
+
+Routing uses URL hashes (for example, `/patternfly-playground/#/command-palette` on GitHub Pages) so direct prototype links work without server rewrites.
 
 The header lets you choose System, Light, or Dark mode and independently opt in to Project Felt. Your selection is saved in this browser; System follows OS appearance changes.
 

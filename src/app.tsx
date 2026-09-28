@@ -1,6 +1,18 @@
 import { useEffect, useState } from "react";
-import { Switch, Title, ToggleGroup, ToggleGroupItem } from "@patternfly/react-core";
-import { CommandPalettePrototype } from "./command-palette-prototype";
+import { Link, Outlet } from "@tanstack/react-router";
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  Gallery,
+  Label,
+  Switch,
+  Title,
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@patternfly/react-core";
 import { applyThemePreference, readThemePreference, saveThemePreference } from "./theme-preference";
 import type { ColorScheme } from "./theme-preference";
 
@@ -28,10 +40,10 @@ export default function App() {
   return (
     <div className="playground-shell">
       <header className="playground-header">
-        <div className="playground-brand">
+        <Link to="/" className="playground-brand">
           <span className="brand-mark">pf</span>
           <span>PatternFly playground</span>
-        </div>
+        </Link>
         <div className="theme-controls" role="group" aria-label="Theme settings">
           <ToggleGroup aria-label="Color scheme" isCompact>
             {colorSchemes.map(({ value, label }) => (
@@ -52,15 +64,40 @@ export default function App() {
         </div>
       </header>
       <main className="playground-main">
-        <div className="page-heading">
-          <p className="page-overline">Syntara navigation study</p>
-          <Title headingLevel="h1" size="3xl">
-            Syntara command palette
-          </Title>
-          <p>Find a destination in Syntara’s main navigation without losing your place.</p>
-        </div>
-        <CommandPalettePrototype />
+        <Outlet />
       </main>
     </div>
+  );
+}
+
+export function PrototypeIndex() {
+  return (
+    <>
+      <div className="page-heading">
+        <Title headingLevel="h1" size="3xl">
+          Prototypes
+        </Title>
+      </div>
+      <Gallery hasGutter className="prototype-gallery">
+        <Card isFullHeight>
+          <CardHeader>
+            <Label color="purple" isCompact>
+              Navigation
+            </Label>
+          </CardHeader>
+          <CardTitle>
+            <Title headingLevel="h2" size="lg">
+              Syntara command palette
+            </Title>
+          </CardTitle>
+          <CardBody>Find Syntara pages from a keyboard-accessible command palette.</CardBody>
+          <CardFooter>
+            <Link to="/command-palette" aria-label="Open Syntara command palette prototype">
+              Open prototype
+            </Link>
+          </CardFooter>
+        </Card>
+      </Gallery>
+    </>
   );
 }

@@ -219,11 +219,9 @@ button {
   display: grid;
   gap: var(--pf-t--global--spacer--2xl);
 }
-.shiki-prototype .proposal-intro h2.pf-v6-c-title {
-  font-size: 22px;
-}
-.shiki-alert {
-  margin-bottom: var(--pf-t--global--spacer--md);
+/* The alert sits between the intro and the code block, so it only needs space below. */
+.proposal > .pf-v6-c-alert.shiki-alert {
+  margin: 0 0 var(--pf-t--global--spacer--md);
 }
 .shiki-control-label {
   display: block;
@@ -232,12 +230,19 @@ button {
   font-size: var(--pf-t--global--font--size--sm);
   font-weight: 600;
 }
-/* Use the selected theme's surface so its token colors keep their intended contrast. */
+/* Use the selected theme's surface so its token colors keep their intended contrast.
+   Until a theme has loaded (or if it fails), fall back to PatternFly's surface. */
 .pf-v6-c-code-block.shiki-code-block {
-  --pf-v6-c-code-block--BackgroundColor: var(--shiki-light-bg);
+  --pf-v6-c-code-block--BackgroundColor: var(
+    --shiki-light-bg,
+    var(--pf-t--global--background--color--secondary--default)
+  );
 }
 .pf-v6-theme-dark .pf-v6-c-code-block.shiki-code-block {
-  --pf-v6-c-code-block--BackgroundColor: var(--shiki-dark-bg);
+  --pf-v6-c-code-block--BackgroundColor: var(
+    --shiki-dark-bg,
+    var(--pf-t--global--background--color--secondary--default)
+  );
 }
 /* Shiki emits both palettes as CSS variables; the playground theme class picks one. */
 .shiki-tokens span,
@@ -252,30 +257,15 @@ button {
   font-style: var(--shiki-dark-font-style);
   font-weight: var(--shiki-dark-font-weight);
 }
-/* Approach A: token spans live inside PatternFly's pre/code. */
-.shiki-tokens .line {
-  display: inline;
-}
-/* Approach B: Shiki owns the pre; tame it to sit inside CodeBlock. */
-.shiki-html-body {
-  overflow: auto;
-}
-.shiki-html-body pre.shiki {
+/* Approach B: Shiki owns the pre; match PatternFly's pre so the two approaches compare fairly.
+   CodeBlock's content wrapper already provides the padding. */
+.shiki-html-body pre.shiki,
+.shiki-html-fallback {
   margin: 0;
-  padding: var(--pf-t--global--spacer--md);
   background: transparent;
-  font-family: var(--pf-t--global--font--family--mono);
-  font-size: var(--pf-t--global--font--size--sm);
-  line-height: var(--pf-t--global--font--line-height--body);
-}
-.shiki-html-loading,
-.shiki-html-fallback {
-  padding: var(--pf-t--global--spacer--md);
-}
-.shiki-html-fallback {
-  margin: 0;
+  font-family: var(--pf-v6-c-code-block__pre--FontFamily);
+  font-size: var(--pf-v6-c-code-block__pre--FontSize);
   white-space: pre-wrap;
-  font-family: var(--pf-t--global--font--family--mono);
 }
 @media (max-width: 640px) {
   .playground-header {

@@ -28,7 +28,16 @@ import type { Highlighted, HighlightLang, ThemePair } from "./shiki-highlighter"
 type HighlightState<T> =
   | { status: "loading" }
   | { status: "done"; value: Highlighted<T> }
-  | { status: "error"; message: string };
+  | { status: "error" };
+
+const langLabels: Record<HighlightLang, string> = {
+  typescript: "TypeScript",
+  tsx: "TSX",
+  javascript: "JavaScript",
+  json: "JSON",
+  yaml: "YAML",
+  bash: "Bash",
+};
 
 type CodeBlockProps = { code: string; lang: HighlightLang; pair: ThemePair };
 
@@ -37,7 +46,7 @@ type CodeBlockProps = { code: string; lang: HighlightLang; pair: ThemePair };
 function useHighlighted<T>(
   { code, lang, pair }: CodeBlockProps,
   highlight: (code: string, lang: HighlightLang, pair: ThemePair) => Promise<Highlighted<T>>,
-): [HighlightState<T>, isStale: boolean] {
+): [HighlightState<T>, isBusy: boolean] {
   const [result, setResult] = useState<{ key: string; highlighted: HighlightState<T> }>();
   const key = `${pair.id}\n${lang}\n${code}`;
 
@@ -45,26 +54,28 @@ function useHighlighted<T>(
     let cancelled = false;
     highlight(code, lang, pair).then(
       (value) => !cancelled && setResult({ key, highlighted: { status: "done", value } }),
-      (error: unknown) =>
-        !cancelled &&
-        setResult({
-          key,
-          highlighted: {
-            status: "error",
-            message: error instanceof Error ? error.message : "Highlight failed",
-          },
-        }),
+      (error: unknown) => {
+        console.error("Shiki highlighting failed", error);
+        if (!cancelled) setResult({ key, highlighted: { status: "error" } });
+      },
     );
     return () => {
       cancelled = true;
     };
   }, [code, lang, pair, key, highlight]);
 
-  return [result?.highlighted ?? { status: "loading" }, result !== undefined && result.key !== key];
+  // Busy on first load (spinner) and while a previous result is shown for a stale key.
+  return [result?.highlighted ?? { status: "loading" }, result?.key !== key];
 }
 
+const copyMessages = {
+  idle: "Copy to clipboard",
+  copied: "Successfully copied to clipboard!",
+  failed: "Copy failed",
+};
+
 function CopyCodeAction({ code, id }: { code: string; id: string }) {
-  const [copied, setCopied] = useState(false);
+  const [copyState, setCopyState] = useState<keyof typeof copyMessages>("idle");
 
   return (
     <CodeBlockAction>
@@ -72,15 +83,20 @@ function CopyCodeAction({ code, id }: { code: string; id: string }) {
         id={id}
         aria-label="Copy code to clipboard"
         onClick={async () => {
-          await navigator.clipboard.writeText(code);
-          setCopied(true);
+          // The Clipboard API is missing on insecure origins (e.g. the dev server over a LAN IP).
+          try {
+            await navigator.clipboard.writeText(code);
+            setCopyState("copied");
+          } catch {
+            setCopyState("failed");
+          }
         }}
-        exitDelay={copied ? 1500 : 600}
+        exitDelay={copyState === "idle" ? 600 : 1500}
         maxWidth="110px"
         variant="plain"
-        onTooltipHidden={() => setCopied(false)}
+        onTooltipHidden={() => setCopyState("idle")}
       >
-        {copied ? "Successfully copied to clipboard!" : "Copy to clipboard"}
+        {copyMessages[copyState]}
       </ClipboardCopyButton>
     </CodeBlockAction>
   );
@@ -91,16 +107,16 @@ const loadingSpinner = <Spinner size="md" aria-label="Highlighting code" />;
 /** Approach A: keep CodeBlockCode's <pre><code> and inject Shiki token spans. */
 function TokenSpansCodeBlock(props: CodeBlockProps) {
   const { code } = props;
-  const [highlighted, isStale] = useHighlighted<ReactNode>(props, highlightToReactNodes);
+  const [highlighted, isBusy] = useHighlighted<ReactNode>(props, highlightToReactNodes);
 
   return (
     <CodeBlock
       className="shiki-code-block"
-      aria-busy={isStale}
+      aria-busy={isBusy}
       style={highlighted.status === "done" ? highlighted.value.style : undefined}
       actions={<CopyCodeAction code={code} id="approach-a-copy" />}
     >
-      <CodeBlockCode id="approach-a-code" className="shiki-tokens">
+      <CodeBlockCode className="shiki-tokens">
         {highlighted.status === "done"
           ? highlighted.value.body
           : highlighted.status === "error"
@@ -114,12 +130,12 @@ function TokenSpansCodeBlock(props: CodeBlockProps) {
 /** Approach B: CodeBlock chrome only; Shiki owns the <pre><code> via HTML. */
 function ShikiHtmlCodeBlock(props: CodeBlockProps) {
   const { code } = props;
-  const [highlighted, isStale] = useHighlighted(props, highlightToHtml);
+  const [highlighted, isBusy] = useHighlighted(props, highlightToHtml);
 
   return (
     <CodeBlock
       className="shiki-code-block"
-      aria-busy={isStale}
+      aria-busy={isBusy}
       style={highlighted.status === "done" ? highlighted.value.style : undefined}
       actions={<CopyCodeAction code={code} id="approach-b-copy" />}
     >
@@ -132,7 +148,7 @@ function ShikiHtmlCodeBlock(props: CodeBlockProps) {
       ) : highlighted.status === "error" ? (
         <pre className="shiki-html-fallback">{code}</pre>
       ) : (
-        <div className="shiki-html-loading">{loadingSpinner}</div>
+        loadingSpinner
       )}
     </CodeBlock>
   );
@@ -146,11 +162,7 @@ export function ShikiCodeBlockPrototype() {
 
   return (
     <div className="shiki-prototype">
-      <Flex
-        className="shiki-controls"
-        spaceItems={{ default: "spaceItemsXl" }}
-        rowGap={{ default: "rowGapMd" }}
-      >
+      <Flex spaceItems={{ default: "spaceItemsXl" }} rowGap={{ default: "rowGapMd" }}>
         <FlexItem>
           <span className="shiki-control-label" id="shiki-lang-label">
             Language
@@ -159,7 +171,7 @@ export function ShikiCodeBlockPrototype() {
             {highlightLangs.map((item) => (
               <ToggleGroupItem
                 key={item}
-                text={item}
+                text={langLabels[item]}
                 buttonId={`lang-${item}`}
                 isSelected={lang === item}
                 onChange={() => setLang(item)}

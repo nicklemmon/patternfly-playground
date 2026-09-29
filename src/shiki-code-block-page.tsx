@@ -14,8 +14,8 @@ export function ShikiCodeBlockPage() {
           Shiki + PatternFly CodeBlock
         </Title>
         <p>
-          Compare two ways to compose <code>shiki/bundle/web</code> with PatternFly’s CodeBlock.
-          Prefer Approach A for real apps — it keeps PatternFly’s pre and code elements.
+          Compare two ways to compose Shiki syntax highlighting with PatternFly’s CodeBlock. Prefer
+          Approach A for real apps — it keeps PatternFly’s pre and code elements.
         </p>
       </div>
       <ShikiCodeBlockPrototype />

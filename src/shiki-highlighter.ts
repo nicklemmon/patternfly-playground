@@ -40,7 +40,7 @@ export type ThemePair = (typeof themePairs)[number];
 
 export type Highlighted<T> = {
   body: T;
-  /** Theme background/foreground as CSS variables for the surrounding CodeBlock. */
+  /** Theme backgrounds as CSS variables for the surrounding CodeBlock. */
   style: CSSProperties;
 };
 
@@ -59,6 +59,10 @@ async function getHighlighter(pair: ThemePair) {
       import("shiki/langs/bash.mjs"),
     ],
     engine: createJavaScriptRegexEngine(),
+  }).catch((error: unknown) => {
+    // Don't cache a failed setup (e.g. a grammar chunk failed to load); retry on the next call.
+    highlighterPromise = undefined;
+    throw error;
   });
   const highlighter = await highlighterPromise;
   const missing = [pair.light, pair.dark].filter(
@@ -75,13 +79,9 @@ function themeOptions(pair: ThemePair) {
 }
 
 function themeStyle(highlighter: HighlighterCore, pair: ThemePair): CSSProperties {
-  const light = highlighter.getTheme(pair.light);
-  const dark = highlighter.getTheme(pair.dark);
   return {
-    "--shiki-light-bg": light.bg,
-    "--shiki-light-fg": light.fg,
-    "--shiki-dark-bg": dark.bg,
-    "--shiki-dark-fg": dark.fg,
+    "--shiki-light-bg": highlighter.getTheme(pair.light).bg,
+    "--shiki-dark-bg": highlighter.getTheme(pair.dark).bg,
   } as CSSProperties;
 }
 

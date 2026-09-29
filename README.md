@@ -32,6 +32,16 @@ npm run format
 npm run format:check
 ```
 
+## QA
+
+The QA workflow (`.github/workflows/qa.yml`) runs on every pull request and on pushes to `main`. It checks lint, formatting, and types. Run the same checks locally with:
+
+```bash
+npm run lint
+npm run format:check
+npm run typecheck
+```
+
 ## Live preview
 
 The latest version of `main` is deployed to [GitHub Pages](https://nicklemmon.github.io/patternfly-playground/) by the workflow in `.github/workflows/deploy-pages.yml`. The repository is configured to use **GitHub Actions** as the Pages build source.

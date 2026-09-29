@@ -18,9 +18,14 @@ const commandPaletteRoute = createRoute({
   path: "/command-palette",
   component: lazyRouteComponent(() => import("./command-palette-page"), "CommandPalettePage"),
 });
+const shikiCodeBlockRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/shiki-code-block",
+  component: lazyRouteComponent(() => import("./shiki-code-block-page"), "ShikiCodeBlockPage"),
+});
 
 export const router = createRouter({
-  routeTree: rootRoute.addChildren([indexRoute, commandPaletteRoute]),
+  routeTree: rootRoute.addChildren([indexRoute, commandPaletteRoute, shikiCodeBlockRoute]),
   history: createHashHistory(),
 });
 
